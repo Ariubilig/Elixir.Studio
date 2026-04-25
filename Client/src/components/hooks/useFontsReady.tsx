@@ -3,19 +3,19 @@ import { useEffect, useState } from "react";
 
 export function useFontsReady() {
 
+
   const [fontsReady, setFontsReady] = useState(false);
 
   useEffect(() => {
-    if (document.fonts.status === "loaded") {
-      setFontsReady(true);
-      return;
-    }
+    let cancelled = false;
 
-    document.fonts.ready.then(() => { // waits all fonts finish
-      setFontsReady(true);
+    document.fonts.ready.then(() => {
+      if (!cancelled) setFontsReady(true);
     });
+
+    return () => { cancelled = true; };
   }, []);
 
   return fontsReady;
-  
+
 }
