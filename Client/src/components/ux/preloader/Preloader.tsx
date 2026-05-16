@@ -3,7 +3,7 @@ import SplitTextReveal from "../splittext/SplitTextReveal";
 
 const DEFAULT_PHRASES = [
   "Not Real, Yet.",
-  "Creative Studio",
+  "yu geh vee",
   "From the bottom",
   "Elixir.Studio™",
 ];
