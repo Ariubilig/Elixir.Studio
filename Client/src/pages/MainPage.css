@@ -1,0 +1,58 @@
+.voku-nav {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+}
+
+.voku-nav__logo {
+  will-change: transform;
+  font-family: "Archivo", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.4;
+  letter-spacing: 0.012em;
+}
+
+.voku-nav__item {
+  font-family: "Archivo", sans-serif;
+  font-weight: 400;
+}
+
+.voku-nav__logo + .voku-nav__item {
+  margin-left: 10px;
+}
+
+.voku-nav__item + .voku-nav__item {
+  margin-left: 6px;
+}
+
+.voku-nav__item:not(.contact-item) + .contact-item {
+  margin-left: 10px;
+}
+
+.client-name {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  color: var(--ink);
+}
+.client-name::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -0.25em;
+  width: 100%;
+  height: 0.044em;
+  background: var(--ink);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 300ms ease-out;
+}
+.client-name:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+.client-name.active::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}

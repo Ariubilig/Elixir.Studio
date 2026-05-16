@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap');
+
+/* ─────────── Tokens ─────────── */
+:root {
+  --bg: #FFFDFC;
+  --ink: #000000;
+  --muted: rgba(20, 20, 20, 0.4);
+}
+
+/* ─────────── Page setup ───────────
+ * If you already have a global reset / body styles in your project,
+ * delete this block and keep only the component styles below.
+ */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Archivo", sans-serif;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* ─────────── Smooth content ─────────── */
+#smooth-content {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ─────────── Preloader ─────────── */
+.preloader {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  z-index: 100;
+  font-size: 16px;
+  letter-spacing: 0.012em;
+  line-height: 1.4;
+  transition: opacity 0.4s ease;
+}
+
+.preloader--exiting {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.preloader-phrase {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* ─────────── Main page ─────────── */
+.main-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2em;
+}
+
+.nav-row {
+  display: flex;
+  gap: 1.6em;
+  align-items: baseline;
+  white-space: nowrap;
+  font-size: 14px;
+  letter-spacing: 0.012em;
+}
+
+.nav-item {
+  display: inline-block;
+}
+
+/* ─────────── UI chrome ─────────── */
+.replay {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  background: transparent;
+  border: 1px solid rgba(20, 20, 20, 0.18);
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 11px;
+  padding: 7px 14px;
+  cursor: pointer;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: 999px;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.replay:hover {
+  background: rgba(20, 20, 20, 0.04);
+  border-color: rgba(20, 20, 20, 0.4);
+}

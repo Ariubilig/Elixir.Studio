@@ -1,0 +1,45 @@
+.about-panel {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 400px;
+  height: calc(100vh - 40px);
+  overflow-y: auto;
+  background: var(--bg);
+  z-index: 50;
+  scrollbar-width: none;
+}
+
+.about-panel::-webkit-scrollbar {
+  display: none;
+}
+
+.about-panel__logo {
+  display: block;
+  width: calc(100% - 85px);
+  margin-left: 43px;
+}
+
+.about-panel__intro {
+  margin-top: 10px;
+  font-size: 14px;
+  line-height: 1.4;
+  letter-spacing: 0.012em;
+}
+
+.about-panel__photo {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.about-panel__body {
+  margin-top: 10px;
+  font-size: 14px;
+  line-height: 1.4;
+  letter-spacing: 0.012em;
+}
+
+.about-panel__we-are {
+  margin-bottom: 4px;
+}
