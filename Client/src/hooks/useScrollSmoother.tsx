@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother); // Register once at module level
 
-const useScrollSmoother = (wrapperRef, { enabled = true } = {}) => {
+const useScrollSmoother = (wrapperRef: React.RefObject<HTMLElement | null>, { enabled = true }: { enabled?: boolean } = {}) => {
 
   useEffect(() => {
     if (!enabled || !wrapperRef.current) return;

@@ -57,19 +57,29 @@ export default function VokuNav({ ready = false }) {
     if (!navRef.current) return;
     const oldRects = rectsRef.current;
     const ease = "cubic-bezier(0.22, 1, 0.36, 1)";
+
+    const flips = [];
     navRef.current.querySelectorAll("[data-flip-id]").forEach((el) => {
       const id = el.dataset.flipId;
       const oldRect = oldRects[id];
       if (!oldRect) return;
       const newRect = el.getBoundingClientRect();
       const dx = oldRect.left - newRect.left;
-      if (Math.abs(dx) > 0.5) {
-        el.style.transition = "none";
-        el.style.transform = `translateX(${dx}px)`;
-        el.offsetHeight;
-        el.style.transition = `transform ${FLIP_DURATION}ms ${ease}`;
-        el.style.transform = "translateX(0)";
-      }
+      if (Math.abs(dx) > 0.5) flips.push({ el, dx });
+    });
+
+    if (flips.length === 0) return;
+
+    flips.forEach(({ el, dx }) => {
+      el.style.transition = "none";
+      el.style.transform = `translateX(${dx}px)`;
+    });
+
+    flips[0].el.offsetHeight;
+
+    flips.forEach(({ el }) => {
+      el.style.transition = `transform ${FLIP_DURATION}ms ${ease}`;
+      el.style.transform = "translateX(0)";
     });
   }, [visibleCount, contactVisible]);
 
