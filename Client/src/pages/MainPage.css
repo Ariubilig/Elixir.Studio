@@ -56,3 +56,56 @@
   transform: scaleX(1);
   transform-origin: left;
 }
+
+.voku-nav-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.voku-nav__clock {
+  cursor: default;
+  pointer-events: none;
+}
+
+.voku-nav__clock::after {
+  display: none;
+}
+
+.voku-nav__contact-row {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 4px;
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: -0.03em;
+}
+
+.voku-nav__contact-row .contact-item {
+  font-size: 12px;
+  letter-spacing: -0.03em;
+}
+
+@media (max-width: 480px) {
+  .voku-nav,
+  .voku-nav__logo,
+  .voku-nav__item {
+    letter-spacing: -0.03em;
+  }
+
+  .voku-nav-wrapper--mobile {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 60;
+    width: max-content;
+    transition: background 0.3s ease;
+  }
+
+  .voku-nav-wrapper--mobile.voku-nav-wrapper--about-open {
+    background: #EEEEEE;
+  }
+}

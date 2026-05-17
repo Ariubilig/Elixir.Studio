@@ -8,7 +8,7 @@ export default function useGMTplus8() {
 
   useEffect(() => {
     const formatter = new Intl.DateTimeFormat("en-US", {
-      hour12: true,          // AM/PM format
+      hour12: false,
       hour: "2-digit",
       minute: "2-digit",
       second: "2-digit",

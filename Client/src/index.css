@@ -117,3 +117,9 @@ body {
   background: rgba(20, 20, 20, 0.04);
   border-color: rgba(20, 20, 20, 0.4);
 }
+
+@media (max-width: 480px) {
+  .preloader {
+    letter-spacing: -0.03em;
+  }
+}
