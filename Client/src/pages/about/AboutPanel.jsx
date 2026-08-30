@@ -69,13 +69,13 @@ export default function AboutPanel({ open = false }) {
   return (
     <aside ref={panelRef} className="about-panel">
       <div className="about-panel__block">
-        <img src="/IMG.png" className="about-panel__photo" alt="" />
+        <img src="/IMG.webp" className="about-panel__photo" width="460" height="345" decoding="async" alt="" />
       </div>
 
       <div className="about-panel__block about-panel__text">{INTRO}</div>
 
       <div className="about-panel__block">
-        <img src="/IMG2.png" className="about-panel__photo" alt="" />
+        <img src="/IMG2.webp" className="about-panel__photo" width="460" height="307" decoding="async" alt="" />
       </div>
 
       <div className="about-panel__block about-panel__text">{TEAM}</div>

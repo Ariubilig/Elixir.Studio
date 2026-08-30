@@ -27,7 +27,9 @@ const CONTACT_REVEAL_BASE_DELAY = FLIP_DURATION / 1800;
 // The script is the last thing to settle, once every nav item has landed.
 const SCRIPT_REVEAL_DELAY = (INITIAL_DELAY + MENU_ITEMS.length * STAGGER) / 1000;
 
-function ClockDisplay({ time, delay = 0 }) {
+function ClockDisplay({ delay = 0 }) {
+  // Owned here so the tick re-renders this span alone, not the whole page.
+  const time = useGMTplus8();
   const ref = useRef(null);
   const [animDone, setAnimDone] = useState(false);
   const frozenTime = useRef(time);
@@ -71,7 +73,6 @@ export default function VokuNav({ ready = false }) {
   const rectsRef = useRef({});
   const exitTween = useRef(null);
   const contactRowRef = useRef(null);
-  const currentTime = useGMTplus8();
   const isMobile = useIsMobile();
 
   const captureRects = useCallback(() => {
@@ -249,7 +250,7 @@ export default function VokuNav({ ready = false }) {
             ))}
 
           {!isMobile && contactVisible && (
-            <ClockDisplay time={currentTime} delay={CONTACT_REVEAL_BASE_DELAY + CONTACT_ITEMS.length * CONTACT_REVEAL_STAGGER} />
+            <ClockDisplay delay={CONTACT_REVEAL_BASE_DELAY + CONTACT_ITEMS.length * CONTACT_REVEAL_STAGGER} />
           )}
         </nav>
 
@@ -268,7 +269,7 @@ export default function VokuNav({ ready = false }) {
                 {renderContactItem({ label, href, mailto })}
               </SplitTextReveal>
             ))}
-            <ClockDisplay time={currentTime} delay={CONTACT_REVEAL_BASE_DELAY + CONTACT_ITEMS.length * CONTACT_REVEAL_STAGGER} />
+            <ClockDisplay delay={CONTACT_REVEAL_BASE_DELAY + CONTACT_ITEMS.length * CONTACT_REVEAL_STAGGER} />
           </div>
         )}
       </div>

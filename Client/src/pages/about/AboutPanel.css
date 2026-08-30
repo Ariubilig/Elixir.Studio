@@ -22,6 +22,9 @@
 .about-panel__photo {
   display: block;
   width: 100%;
+  /* Paired with the intrinsic width/height attrs: reserves the box before
+     the image lands, so the column never reflows. */
+  height: auto;
 }
 
 .about-panel__text {

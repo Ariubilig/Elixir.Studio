@@ -50,6 +50,7 @@ export default function Script({ ready = false, hidden = false, firstRevealDelay
       className="script"
       // The mobile export carries its own gaussian blur; the desktop one is crisp.
       src={isMobile ? "/script-mobile.svg" : "/script.svg"}
+      decoding="async"
       alt=""
       aria-hidden="true"
     />
