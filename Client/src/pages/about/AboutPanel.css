@@ -2,9 +2,10 @@
   position: fixed;
   top: 20px;
   right: 20px;
-  width: 400px;
+  width: 460px;
   height: calc(100vh - 40px);
   overflow-y: auto;
+  padding-bottom: 20px;
   background: var(--bg);
   z-index: 50;
   scrollbar-width: none;
@@ -14,34 +15,23 @@
   display: none;
 }
 
-.about-panel__logo {
-  display: block;
-  width: calc(100% - 85px);
-  margin-left: 43px;
-}
-
-.about-panel__intro {
+.about-panel__block + .about-panel__block {
   margin-top: 10px;
-  font-size: 14px;
-  line-height: 1.4;
-  letter-spacing: 0.012em;
 }
 
 .about-panel__photo {
   display: block;
   width: 100%;
-  margin-top: 10px;
 }
 
-.about-panel__body {
-  margin-top: 10px;
-  font-size: 14px;
-  line-height: 1.4;
-  letter-spacing: 0.012em;
-}
-
-.about-panel__we-are {
-  margin-bottom: 4px;
+.about-panel__text {
+  /* Design system: Archivo regular, 16px / 120%, -3% tracking. */
+  font-family: "Archivo", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  white-space: pre-wrap;
 }
 
 @media (max-width: 480px) {
@@ -52,16 +42,5 @@
     width: 100%;
     height: 100vh;
     padding: 20px;
-  }
-
-  .about-panel__logo {
-    width: 100%;
-    margin-left: 0;
-  }
-
-  .about-panel__intro,
-  .about-panel__photo,
-  .about-panel__body {
-    margin-top: 10px;
   }
 }

@@ -3,6 +3,23 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import "./AboutPanel.css";
 
+// Blank lines below are real empty lines in the rendered copy — the block is
+// `white-space: pre-wrap`, so the gap is one line-height, never a margin.
+const INTRO = `A creative studio with no limits.
+Founded in 2024 by crazy friends with a spark in their eyes and no intention of playing it safe. We experiment, we create, we break things, and we turn whatever comes out into music.
+
+Based in Ulaanbaatar, Mongolia — creating meaningful digital experiences and music that reach far beyond where we started.`;
+
+const TEAM = `A creative studio with no limits.
+Founded in 2024 by crazy friends with a spark in their eyes and no intention of playing it safe. We experiment, we create, we break things, and we turn whatever comes out into music.
+
+М. Амар
+Э.  Ариунбилиг
+Д. Буянравжих
+Б. Итгэлбаяр
+А. Тэмүүгэн
+А. Шинэсанаа`;
+
 export default function AboutPanel({ open = false }) {
   const panelRef = useRef(null);
   const [visible, setVisible] = useState(false);
@@ -52,30 +69,16 @@ export default function AboutPanel({ open = false }) {
   return (
     <aside ref={panelRef} className="about-panel">
       <div className="about-panel__block">
-        <img src="/logo.png" className="about-panel__logo" alt="Elixir" />
+        <img src="/IMG.png" className="about-panel__photo" alt="" />
       </div>
 
-      <div className="about-panel__block about-panel__intro">
-        <p>Founded in 2024 by friends united by passion and pride.</p>
-        <p>Based in Ulaanbaatar, creating meaningful digital experiences from Mongolia to everywhere.</p>
-      </div>
+      <div className="about-panel__block about-panel__text">{INTRO}</div>
 
       <div className="about-panel__block">
-        <img src="/image.png" className="about-panel__photo" alt="" />
+        <img src="/IMG2.png" className="about-panel__photo" alt="" />
       </div>
 
-      <div className="about-panel__block about-panel__body">
-        <p className="about-panel__we-are">We are</p>
-        <p>asddasd asdasdasd asdad. Based on Ulaanbaatar, Mongolia asdsadasd asddasd asdasdasd asdad. Based on Ulaanbaatar, Mongolia asdasddasd asdasdasd asdad. Based on Ulaanbaatar, Mongolia</p>
-      </div>
-
-      <div className="about-panel__block">
-        <img src="/image2.png" className="about-panel__photo" alt="" />
-      </div>
-      <div className="about-panel__block about-panel__body">
-        <p className="about-panel__we-are">We are</p>
-        <p>asddasd asdasdasd asdad. Based on Ulaanbaatar, Mongolia asdsadasd asddasd asdasdasd asdad. Based on Ulaanbaatar, Mongolia asdasddasd asdasdasd asdad. Based on Ulaanbaatar, Mongolia</p>
-      </div>
+      <div className="about-panel__block about-panel__text">{TEAM}</div>
     </aside>
   );
 }
