@@ -94,7 +94,6 @@ export default function Preloader({
       <SplitTextReveal
         key={index}
         type="lines"
-        animateOnScroll={false}
         duration={revealDuration}
         ease="power3.out"
         onComplete={isFirst ? () => setFirstRevealed(true) : undefined}

@@ -40,14 +40,6 @@ body {
   position: relative;
 }
 
-/* ─────────── Smooth content ─────────── */
-#smooth-content {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 /* ─────────── Preloader ─────────── */
 .preloader {
   position: fixed;
@@ -71,51 +63,6 @@ body {
 .preloader-phrase {
   display: inline-block;
   white-space: nowrap;
-}
-
-/* ─────────── Main page ─────────── */
-.main-page {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2em;
-}
-
-.nav-row {
-  display: flex;
-  gap: 1.6em;
-  align-items: baseline;
-  white-space: nowrap;
-  font-size: 14px;
-  letter-spacing: 0.012em;
-}
-
-.nav-item {
-  display: inline-block;
-}
-
-/* ─────────── UI chrome ─────────── */
-.replay {
-  position: fixed;
-  top: 18px;
-  right: 18px;
-  background: transparent;
-  border: 1px solid rgba(20, 20, 20, 0.18);
-  color: var(--ink);
-  font-family: inherit;
-  font-size: 11px;
-  padding: 7px 14px;
-  cursor: pointer;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  border-radius: 999px;
-  transition: background 0.2s, border-color 0.2s;
-}
-
-.replay:hover {
-  background: rgba(20, 20, 20, 0.04);
-  border-color: rgba(20, 20, 20, 0.4);
 }
 
 @media (max-width: 480px) {

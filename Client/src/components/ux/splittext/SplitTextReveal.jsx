@@ -1,10 +1,9 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 
-gsap.registerPlugin(SplitText, ScrollTrigger);
+gsap.registerPlugin(SplitText);
 
 /**
  * SplitTextReveal
@@ -12,14 +11,15 @@ gsap.registerPlugin(SplitText, ScrollTrigger);
  * Animates text by splitting it into lines or characters and revealing
  * each piece from bottom (y: 100%) to top (y: 0%) inside a mask.
  *
+ * Reveals on mount. Nothing on this site scrolls — the page is a fixed
+ * viewport — so there is no scroll-triggered variant.
+ *
  * @param {React.ReactNode} children - Text content to animate
  * @param {"lines"|"chars"} type - Split granularity (default: "lines")
- * @param {boolean} animateOnScroll - Trigger on scroll vs. on mount (default: true)
  * @param {number} delay - Initial delay in seconds (default: 0)
  * @param {number} duration - Animation duration in seconds (default: 1)
  * @param {number} stagger - Delay between pieces. Defaults to 0.1 for lines, 0.03 for chars.
  * @param {string} ease - GSAP easing (default: "power4.out")
- * @param {string} scrollTriggerStart - ScrollTrigger start position (default: "top 75%")
  * @param {Function} onComplete - Called once the reveal tween has finished
  * @param {boolean} exiting - Flip to true to lift the text back out of the mask
  * @param {number} exitDuration - Exit duration in seconds (default: 0.4)
@@ -32,12 +32,10 @@ gsap.registerPlugin(SplitText, ScrollTrigger);
 export default function SplitTextReveal({
   children,
   type = "lines",
-  animateOnScroll = true,
   delay = 0,
   duration = 1,
   stagger,
   ease = "power4.out",
-  scrollTriggerStart = "top 75%",
   onComplete,
   exiting = false,
   exitDuration = 0.4,
@@ -146,44 +144,23 @@ export default function SplitTextReveal({
 
         gsap.set(targets.current, { y: "100%" });
 
-        const animationProps = {
+        gsap.to(targets.current, {
           y: "0%",
           duration,
           stagger: effectiveStagger,
           ease,
           delay,
           onComplete: () => onCompleteRef.current?.(),
-        };
-
-        if (animateOnScroll) {
-          gsap.to(targets.current, {
-            ...animationProps,
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: scrollTriggerStart,
-              once: true,
-              // markers: true, // Will add scroll trigger markers for debugging
-            },
-          });
-
-          ScrollTrigger.refresh(); // Refresh ScrollTrigger for smoothScroll
-        } else {
-          gsap.to(targets.current, animationProps);
-        }
+        });
       });
 
       return () => {
         splitRefs.current.forEach(split => split?.revert()); // revert SplitText
-        ScrollTrigger.getAll().forEach(st => { // Clean up ScrollTriggers
-          if (st.trigger === containerRef.current) {
-            st.kill();
-          }
-        });
       };
     },
     {
       scope: containerRef,
-      dependencies: [type, animateOnScroll, delay, duration, effectiveStagger, ease, scrollTriggerStart],
+      dependencies: [type, delay, duration, effectiveStagger, ease],
     }
   );
 

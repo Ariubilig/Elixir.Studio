@@ -1,20 +1,7 @@
 // usage: useAwayTitle()
 
 
-import { useEffect, useSyncExternalStore } from 'react'
-
-function subscribe(onStoreChange: () => void) {
-  document.addEventListener('visibilitychange', onStoreChange)
-  return () => document.removeEventListener('visibilitychange', onStoreChange)
-}
-
-const getSnapshot = () => document.visibilityState === 'visible'
-const getServerSnapshot = () => true
-
-/** `true` while the tab is the active one, `false` once it is backgrounded. */
-export function usePageVisibility() {
-  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
-}
+import { useEffect } from 'react'
 
 export type AwayTitleOptions = {
   /** Title restored on return. Defaults to whatever the title was on mount. */
