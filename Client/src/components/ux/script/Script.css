@@ -1,0 +1,10 @@
+.script {
+  position: fixed;
+  top: 40px;
+  left: 40px;
+  z-index: 40; /* under the panels, over the page */
+  display: block;
+  opacity: 0; /* the fade-in owns this from here */
+  pointer-events: none;
+  user-select: none;
+}

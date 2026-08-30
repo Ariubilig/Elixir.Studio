@@ -2,6 +2,7 @@ import "./MainPage.css";
 import SplitTextReveal from "../components/ux/splittext/SplitTextReveal";
 import AboutPanel from "./about/AboutPanel";
 import WorksPanel from "./works/WorksPanel";
+import Script from "../components/ux/script/Script";
 import { useRef, useState, useEffect, useCallback } from "react";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
@@ -23,6 +24,8 @@ const CHAR_DURATION = 0.5;
 const CHAR_STAGGER = 0.02;
 const CONTACT_REVEAL_STAGGER = 0.2;
 const CONTACT_REVEAL_BASE_DELAY = FLIP_DURATION / 1800;
+// The script is the last thing to settle, once every nav item has landed.
+const SCRIPT_REVEAL_DELAY = (INITIAL_DELAY + MENU_ITEMS.length * STAGGER) / 1000;
 
 function ClockDisplay({ time, delay = 0 }) {
   const ref = useRef(null);
@@ -63,6 +66,7 @@ export default function VokuNav({ ready = false }) {
   const [visibleCount, setVisibleCount] = useState(0);
   const [activePanel, setActivePanel] = useState(null);
   const [contactVisible, setContactVisible] = useState(false);
+  const [worksOnScreen, setWorksOnScreen] = useState(false);
   const navRef = useRef(null);
   const rectsRef = useRef({});
   const exitTween = useRef(null);
@@ -269,7 +273,12 @@ export default function VokuNav({ ready = false }) {
         )}
       </div>
 
-      <WorksPanel open={activePanel === "Works."} />
+      <Script
+        ready={ready}
+        hidden={activePanel === "Works." || worksOnScreen}
+        firstRevealDelay={SCRIPT_REVEAL_DELAY}
+      />
+      <WorksPanel open={activePanel === "Works."} onVisibleChange={setWorksOnScreen} />
       <AboutPanel open={activePanel === "About."} />
     </>
   );

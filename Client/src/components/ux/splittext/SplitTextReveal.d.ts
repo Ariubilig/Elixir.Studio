@@ -10,6 +10,10 @@ export interface SplitTextRevealProps {
   ease?: string;
   scrollTriggerStart?: string;
   onComplete?: () => void;
+  exiting?: boolean;
+  exitDuration?: number;
+  exitEase?: string;
+  onExited?: () => void;
   className?: string;
   style?: CSSProperties;
   wrapperTag?: string;

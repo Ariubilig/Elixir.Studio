@@ -14,7 +14,7 @@ const WORKS = [
   "Emira ft Noel Bellatrix - Untitled",
 ];
 
-export default function WorksPanel({ open = false }) {
+export default function WorksPanel({ open = false, onVisibleChange }) {
   const panelRef = useRef(null);
   const [visible, setVisible] = useState(false);
   const animatingOut = useRef(false);
@@ -43,6 +43,12 @@ export default function WorksPanel({ open = false }) {
       }
     }
   }, [open]);
+
+  // Lets the page know when the list is really gone, not just when it was
+  // asked to close - the exit fade runs on after that.
+  useEffect(() => {
+    onVisibleChange?.(visible);
+  }, [visible, onVisibleChange]);
 
   useGSAP(
     () => {

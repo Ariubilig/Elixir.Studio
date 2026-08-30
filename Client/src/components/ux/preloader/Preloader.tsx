@@ -23,6 +23,8 @@ export default function Preloader({
   holdMs = 600,
   firstHoldMs = 1000,
   finalHoldMs = 800,
+  revealDuration = 0.7,
+  exitDuration = 0.25,
 }: {
   onFinish: () => void;
   exiting?: boolean;
@@ -31,10 +33,13 @@ export default function Preloader({
   holdMs?: number;
   firstHoldMs?: number;
   finalHoldMs?: number;
+  revealDuration?: number;
+  exitDuration?: number;
 }) {
   const [index, setIndex] = useState(0);
   const [shouldShow, setShouldShow] = useState(true);
   const [firstRevealed, setFirstRevealed] = useState(false);
+  const [phraseExiting, setPhraseExiting] = useState(false);
   const isFirst = index === 0;
   const isLast = index === phrases.length - 1;
 
@@ -54,7 +59,7 @@ export default function Preloader({
   }, [shouldShow, firstRevealed]);
 
   useEffect(() => {
-    if (!shouldShow) return;
+    if (!shouldShow || phraseExiting) return;
     // The opening phrase is the one people actually have to read, so its hold
     // starts only once it has finished rising — the later cuts stay quick.
     if (isFirst && !firstRevealed) return;
@@ -63,11 +68,17 @@ export default function Preloader({
         sessionStorage.setItem('sessionLoaded', 'true');
         onFinish?.();
       } else {
-        setIndex((i) => i + 1);
+        setPhraseExiting(true); // lift this phrase out; the next one follows it
       }
     }, isLast ? finalHoldMs : isFirst ? firstHoldMs : holdMs);
     return () => clearTimeout(timer);
-  }, [index, isFirst, isLast, firstRevealed, shouldShow, onFinish, holdMs, firstHoldMs, finalHoldMs]);
+  }, [index, isFirst, isLast, firstRevealed, phraseExiting, shouldShow, onFinish, holdMs, firstHoldMs, finalHoldMs]);
+
+  // Batched, so the next phrase mounts already unset and rises from the bottom.
+  const handlePhraseExited = () => {
+    setIndex((i) => i + 1);
+    setPhraseExiting(false);
+  };
 
   const handleTransitionEnd = (e: React.TransitionEvent<HTMLDivElement>) => {
     if (e.propertyName === "opacity") onExited?.();
@@ -84,8 +95,12 @@ export default function Preloader({
         key={index}
         type="lines"
         animateOnScroll={false}
+        duration={revealDuration}
         ease="power3.out"
         onComplete={isFirst ? () => setFirstRevealed(true) : undefined}
+        exiting={phraseExiting}
+        exitDuration={exitDuration}
+        onExited={handlePhraseExited}
       >
         <span className="preloader-phrase">{phrases[index]}</span>
       </SplitTextReveal>

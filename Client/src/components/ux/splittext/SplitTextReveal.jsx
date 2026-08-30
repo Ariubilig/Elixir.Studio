@@ -21,6 +21,10 @@ gsap.registerPlugin(SplitText, ScrollTrigger);
  * @param {string} ease - GSAP easing (default: "power4.out")
  * @param {string} scrollTriggerStart - ScrollTrigger start position (default: "top 75%")
  * @param {Function} onComplete - Called once the reveal tween has finished
+ * @param {boolean} exiting - Flip to true to lift the text back out of the mask
+ * @param {number} exitDuration - Exit duration in seconds (default: 0.4)
+ * @param {string} exitEase - Easing for the exit (default: "power3.in")
+ * @param {Function} onExited - Called once the exit tween has finished
  * @param {string} className - Additional CSS classes
  * @param {Object} style - Additional inline styles
  * @param {string} wrapperTag - HTML tag for wrapper element when multiple children (default: "div")
@@ -35,12 +39,17 @@ export default function SplitTextReveal({
   ease = "power4.out",
   scrollTriggerStart = "top 75%",
   onComplete,
+  exiting = false,
+  exitDuration = 0.4,
+  exitEase = "power3.in",
+  onExited,
   className = "",
   style = {},
   wrapperTag = "div"
 }) {
   const containerRef = useRef(null);
   const onCompleteRef = useRef(onComplete);
+  const onExitedRef = useRef(onExited);
   const splitRefs = useRef([]);
   const targets = useRef([]);
 
@@ -48,10 +57,33 @@ export default function SplitTextReveal({
   // re-running the animation when the parent re-renders.
   useEffect(() => {
     onCompleteRef.current = onComplete;
+    onExitedRef.current = onExited;
   });
 
   // Smart default stagger based on type
   const effectiveStagger = stagger ?? (type === "chars" ? 0.03 : 0.1);
+
+  // Exit: send the pieces the rest of the way up and out of the mask, so
+  // the next text can rise into the gap they leave behind.
+  useEffect(() => {
+    if (!exiting) return;
+
+    if (targets.current.length === 0) {
+      onExitedRef.current?.(); // never revealed - nothing to lift
+      return;
+    }
+
+    const tween = gsap.to(targets.current, {
+      y: "-100%",
+      duration: exitDuration,
+      stagger: effectiveStagger,
+      ease: exitEase,
+      overwrite: true, // takes the pieces over from an unfinished reveal
+      onComplete: () => onExitedRef.current?.(),
+    });
+
+    return () => tween.kill();
+  }, [exiting, exitDuration, exitEase, effectiveStagger]);
 
   useGSAP(
     () => {
