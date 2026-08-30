@@ -3,10 +3,17 @@ import SplitTextReveal from "../splittext/SplitTextReveal";
 
 const DEFAULT_PHRASES = [
   "Not Real, Yet.",
-  "yu geh vee",
+  "Creative",
+  "Meaningful ",
   "From the bottom",
   "Elixir.Studio™",
 ];
+
+/**
+ * Safety net for the opening phrase: if the reveal never reports back (fonts
+ * stall, SplitText fails), don't strand the preloader on the first word.
+ */
+const REVEAL_TIMEOUT_MS = 2500;
 
 export default function Preloader({
   onFinish,
@@ -14,6 +21,7 @@ export default function Preloader({
   onExited,
   phrases = DEFAULT_PHRASES,
   holdMs = 600,
+  firstHoldMs = 1000,
   finalHoldMs = 800,
 }: {
   onFinish: () => void;
@@ -21,10 +29,13 @@ export default function Preloader({
   onExited?: () => void;
   phrases?: string[];
   holdMs?: number;
+  firstHoldMs?: number;
   finalHoldMs?: number;
 }) {
   const [index, setIndex] = useState(0);
   const [shouldShow, setShouldShow] = useState(true);
+  const [firstRevealed, setFirstRevealed] = useState(false);
+  const isFirst = index === 0;
   const isLast = index === phrases.length - 1;
 
   useEffect(() => {
@@ -37,7 +48,16 @@ export default function Preloader({
   }, [onFinish]);
 
   useEffect(() => {
+    if (!shouldShow || firstRevealed) return;
+    const timer = setTimeout(() => setFirstRevealed(true), REVEAL_TIMEOUT_MS);
+    return () => clearTimeout(timer);
+  }, [shouldShow, firstRevealed]);
+
+  useEffect(() => {
     if (!shouldShow) return;
+    // The opening phrase is the one people actually have to read, so its hold
+    // starts only once it has finished rising — the later cuts stay quick.
+    if (isFirst && !firstRevealed) return;
     const timer = setTimeout(() => {
       if (isLast) {
         sessionStorage.setItem('sessionLoaded', 'true');
@@ -45,9 +65,9 @@ export default function Preloader({
       } else {
         setIndex((i) => i + 1);
       }
-    }, isLast ? finalHoldMs : holdMs);
+    }, isLast ? finalHoldMs : isFirst ? firstHoldMs : holdMs);
     return () => clearTimeout(timer);
-  }, [index, isLast, shouldShow, onFinish, holdMs, finalHoldMs]);
+  }, [index, isFirst, isLast, firstRevealed, shouldShow, onFinish, holdMs, firstHoldMs, finalHoldMs]);
 
   const handleTransitionEnd = (e: React.TransitionEvent<HTMLDivElement>) => {
     if (e.propertyName === "opacity") onExited?.();
@@ -65,6 +85,7 @@ export default function Preloader({
         type="lines"
         animateOnScroll={false}
         ease="power3.out"
+        onComplete={isFirst ? () => setFirstRevealed(true) : undefined}
       >
         <span className="preloader-phrase">{phrases[index]}</span>
       </SplitTextReveal>

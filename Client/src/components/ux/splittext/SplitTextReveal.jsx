@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -20,6 +20,7 @@ gsap.registerPlugin(SplitText, ScrollTrigger);
  * @param {number} stagger - Delay between pieces. Defaults to 0.1 for lines, 0.03 for chars.
  * @param {string} ease - GSAP easing (default: "power4.out")
  * @param {string} scrollTriggerStart - ScrollTrigger start position (default: "top 75%")
+ * @param {Function} onComplete - Called once the reveal tween has finished
  * @param {string} className - Additional CSS classes
  * @param {Object} style - Additional inline styles
  * @param {string} wrapperTag - HTML tag for wrapper element when multiple children (default: "div")
@@ -33,13 +34,21 @@ export default function SplitTextReveal({
   stagger,
   ease = "power4.out",
   scrollTriggerStart = "top 75%",
+  onComplete,
   className = "",
   style = {},
   wrapperTag = "div"
 }) {
   const containerRef = useRef(null);
+  const onCompleteRef = useRef(onComplete);
   const splitRefs = useRef([]);
   const targets = useRef([]);
+
+  // Held in a ref so the tween always calls the latest callback without
+  // re-running the animation when the parent re-renders.
+  useEffect(() => {
+    onCompleteRef.current = onComplete;
+  });
 
   // Smart default stagger based on type
   const effectiveStagger = stagger ?? (type === "chars" ? 0.03 : 0.1);
@@ -49,6 +58,9 @@ export default function SplitTextReveal({
       if (!containerRef.current) return;
 
       document.fonts.ready.then(() => {
+        // Fonts can resolve after the element is gone (route change, key swap).
+        if (!containerRef.current) return;
+
         splitRefs.current.forEach(split => split?.revert()); // revert previous SplitText
         splitRefs.current = [];
         targets.current = [];
@@ -95,7 +107,10 @@ export default function SplitTextReveal({
           }
         });
 
-        if (targets.current.length === 0) return;
+        if (targets.current.length === 0) {
+          onCompleteRef.current?.(); // nothing to reveal - still report done
+          return;
+        }
 
         gsap.set(targets.current, { y: "100%" });
 
@@ -105,6 +120,7 @@ export default function SplitTextReveal({
           stagger: effectiveStagger,
           ease,
           delay,
+          onComplete: () => onCompleteRef.current?.(),
         };
 
         if (animateOnScroll) {

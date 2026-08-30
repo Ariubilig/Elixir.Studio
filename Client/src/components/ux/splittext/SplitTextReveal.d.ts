@@ -9,6 +9,7 @@ export interface SplitTextRevealProps {
   stagger?: number;
   ease?: string;
   scrollTriggerStart?: string;
+  onComplete?: () => void;
   className?: string;
   style?: CSSProperties;
   wrapperTag?: string;
