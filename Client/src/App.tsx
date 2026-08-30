@@ -6,6 +6,7 @@ import type { ComponentType } from 'react';
 
 import Preloader from './components/ux/preloader/Preloader';
 import useScrollSmoother from './hooks/useScrollSmoother';
+import { useAwayTitle } from './hooks/usePageVisibility';
 import MainPageComponent from './pages/MainPage';
 
 const MainPage = MainPageComponent as ComponentType<{ ready: boolean }>;
@@ -18,6 +19,7 @@ function App() {
   const [preloaderHidden, setPreloaderHidden] = useState(false);
   const wrapperRef = useRef(null);
   useScrollSmoother(wrapperRef, { enabled: true });
+  useAwayTitle({ home: 'Elixir.Studio', label: 'Oh' });
 
 
   return (
