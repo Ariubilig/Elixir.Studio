@@ -62,7 +62,7 @@ export default function WorksPanel({ open = false, onVisibleChange }) {
         clearProps: "all",
       });
     },
-    { scope: panelRef, dependencies: [open, visible] }
+    { scope: panelRef, dependencies: [open, visible] },
   );
 
   if (!visible) return null;

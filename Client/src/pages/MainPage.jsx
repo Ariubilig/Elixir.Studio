@@ -3,7 +3,13 @@ import SplitTextReveal from "../components/ux/splittext/SplitTextReveal";
 import AboutPanel from "./about/AboutPanel";
 import WorksPanel from "./works/WorksPanel";
 import Script from "../components/ux/script/Script";
-import { useRef, useState, useEffect, useLayoutEffect, useCallback } from "react";
+import {
+  useRef,
+  useState,
+  useEffect,
+  useLayoutEffect,
+  useCallback,
+} from "react";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
 import { useGSAP } from "@gsap/react";
@@ -14,14 +20,14 @@ const MENU_ITEMS = ["Works.", "About.", "Contact."];
 const CONTACT_ITEMS = [
   { label: "IG", href: "https://www.instagram.com/elixir_recordsofficial/" },
   { label: "YT", href: "https://www.youtube.com/@Elixirecords" },
-  { label: "contact@elixir.studio", mailto: "arierdene0@gmail.com" },
+  { label: "contact@", mailto: "arierdene0@gmail.com" },
 ];
 const INITIAL_DELAY = 800;
 const STAGGER = 300;
 const FLIP_DURATION = 750;
 const CHAR_DURATION = 0.5;
 const CHAR_STAGGER = 0.02;
-// A long label at the flat per-char stagger drags: "contact@elixir.studio" is
+// A long label at the flat per-char stagger drags: "contact@" is
 // 21 chars, so it spends nearly twice as long revealing as "IG" does. Cap the
 // total spread instead, so every item lands on roughly the same beat and only
 // the short ones keep the full CHAR_STAGGER.
@@ -36,7 +42,8 @@ const CONTACT_STAGGER = 200;
 const CONTACT_REVEAL_STAGGER = 0.2;
 const CONTACT_REVEAL_BASE_DELAY = FLIP_DURATION / 1800;
 // The script is the last thing to settle, once every nav item has landed.
-const SCRIPT_REVEAL_DELAY = (INITIAL_DELAY + MENU_ITEMS.length * STAGGER) / 1000;
+const SCRIPT_REVEAL_DELAY =
+  (INITIAL_DELAY + MENU_ITEMS.length * STAGGER) / 1000;
 
 function readTranslateX(el) {
   const t = getComputedStyle(el).transform;
@@ -51,39 +58,45 @@ function ClockDisplay({ delay = 0 }) {
   const [animDone, setAnimDone] = useState(false);
   const initialTime = useRef(time);
 
-  useGSAP(() => {
-    if (!ref.current) return;
-    document.fonts.ready.then(() => {
-      // Fonts can resolve after the element is gone (panel toggled shut).
+  useGSAP(
+    () => {
       if (!ref.current) return;
+      document.fonts.ready.then(() => {
+        // Fonts can resolve after the element is gone (panel toggled shut).
+        if (!ref.current) return;
 
-      let split;
-      try {
-        split = SplitText.create(ref.current, {
-          type: "chars",
-          mask: "chars",
-          charsClass: "char++",
+        let split;
+        try {
+          split = SplitText.create(ref.current, {
+            type: "chars",
+            mask: "chars",
+            charsClass: "char++",
+          });
+        } catch (error) {
+          console.warn("ClockDisplay: failed to split", error);
+          setAnimDone(true); // no reveal, but the clock still has to tick
+          return;
+        }
+
+        gsap.from(split.chars, {
+          y: "100%",
+          duration: CHAR_DURATION,
+          // Longest label on the row, so it leans hardest on the spread cap.
+          stagger: Math.min(
+            CHAR_STAGGER,
+            CHAR_SPREAD_MAX / Math.max(split.chars.length, 1),
+          ),
+          ease: "power4.out",
+          delay,
+          onComplete: () => {
+            split.revert();
+            setAnimDone(true);
+          },
         });
-      } catch (error) {
-        console.warn("ClockDisplay: failed to split", error);
-        setAnimDone(true); // no reveal, but the clock still has to tick
-        return;
-      }
-
-      gsap.from(split.chars, {
-        y: "100%",
-        duration: CHAR_DURATION,
-        // Longest label on the row, so it leans hardest on the spread cap.
-        stagger: Math.min(CHAR_STAGGER, CHAR_SPREAD_MAX / Math.max(split.chars.length, 1)),
-        ease: "power4.out",
-        delay,
-        onComplete: () => {
-          split.revert();
-          setAnimDone(true);
-        },
       });
-    });
-  }, { scope: ref });
+    },
+    { scope: ref },
+  );
 
   // SplitText replaces this span's children, which orphans the text node React
   // is holding: every render after the split writes to a node that is no longer
@@ -130,10 +143,13 @@ export default function VokuNav({ ready = false }) {
     if (!ready) return;
     const timeouts = [];
     for (let i = 0; i < MENU_ITEMS.length; i++) {
-      const t = setTimeout(() => {
-        captureRects();
-        setVisibleCount(i + 1);
-      }, INITIAL_DELAY + i * STAGGER);
+      const t = setTimeout(
+        () => {
+          captureRects();
+          setVisibleCount(i + 1);
+        },
+        INITIAL_DELAY + i * STAGGER,
+      );
       timeouts.push(t);
     }
     return () => timeouts.forEach(clearTimeout);
@@ -238,7 +254,7 @@ export default function VokuNav({ ready = false }) {
       }
       setActivePanel(newPanel);
     },
-    [activePanel, captureRects]
+    [activePanel, captureRects],
   );
 
   const renderContactItem = ({ label, href, mailto }) => {
@@ -247,7 +263,11 @@ export default function VokuNav({ ready = false }) {
       className: "contact-item voku-nav__item client-name",
     };
     if (href) {
-      return <a {...shared} href={href} target="_blank" rel="noopener noreferrer">{label}</a>;
+      return (
+        <a {...shared} href={href} target="_blank" rel="noopener noreferrer">
+          {label}
+        </a>
+      );
     }
     if (mailto) {
       return (
@@ -267,13 +287,19 @@ export default function VokuNav({ ready = false }) {
     "voku-nav-wrapper",
     isMobile && "voku-nav-wrapper--mobile",
     activePanel === "About." && "voku-nav-wrapper--about-open",
-  ].filter(Boolean).join(" ");
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <>
       <div className={wrapperCls}>
         <nav ref={navRef} className="voku-nav">
-          <span data-flip-id="logo" className="voku-nav__logo" onClick={() => handleNavClick(activePanel)}>
+          <span
+            data-flip-id="logo"
+            className="voku-nav__logo"
+            onClick={() => handleNavClick(activePanel)}
+          >
             <span className="client-name">Elixir.Studio</span>
             <span>™</span>
           </span>
@@ -297,23 +323,26 @@ export default function VokuNav({ ready = false }) {
             </SplitTextReveal>
           ))}
 
-          {!isMobile && contactVisible &&
-            CONTACT_ITEMS.slice(0, contactCount).map(({ label, href, mailto }) => (
-              <SplitTextReveal
-                key={label}
-                type="chars"
-                delay={0}
-                duration={CHAR_DURATION}
-                stagger={charStaggerFor(label)}
-                ease="power4.out"
-              >
-                {renderContactItem({ label, href, mailto })}
-              </SplitTextReveal>
-            ))}
+          {!isMobile &&
+            contactVisible &&
+            CONTACT_ITEMS.slice(0, contactCount).map(
+              ({ label, href, mailto }) => (
+                <SplitTextReveal
+                  key={label}
+                  type="chars"
+                  delay={0}
+                  duration={CHAR_DURATION}
+                  stagger={charStaggerFor(label)}
+                  ease="power4.out"
+                >
+                  {renderContactItem({ label, href, mailto })}
+                </SplitTextReveal>
+              ),
+            )}
 
-          {!isMobile && contactVisible && contactCount > CONTACT_ITEMS.length && (
-            <ClockDisplay delay={0} />
-          )}
+          {!isMobile &&
+            contactVisible &&
+            contactCount > CONTACT_ITEMS.length && <ClockDisplay delay={0} />}
         </nav>
 
         {isMobile && contactVisible && (
@@ -322,7 +351,9 @@ export default function VokuNav({ ready = false }) {
               <SplitTextReveal
                 key={label}
                 type="chars"
-                delay={CONTACT_REVEAL_BASE_DELAY + index * CONTACT_REVEAL_STAGGER}
+                delay={
+                  CONTACT_REVEAL_BASE_DELAY + index * CONTACT_REVEAL_STAGGER
+                }
                 duration={CHAR_DURATION}
                 stagger={charStaggerFor(label)}
                 ease="power4.out"
@@ -330,7 +361,12 @@ export default function VokuNav({ ready = false }) {
                 {renderContactItem({ label, href, mailto })}
               </SplitTextReveal>
             ))}
-            <ClockDisplay delay={CONTACT_REVEAL_BASE_DELAY + CONTACT_ITEMS.length * CONTACT_REVEAL_STAGGER} />
+            <ClockDisplay
+              delay={
+                CONTACT_REVEAL_BASE_DELAY +
+                CONTACT_ITEMS.length * CONTACT_REVEAL_STAGGER
+              }
+            />
           </div>
         )}
       </div>
@@ -340,7 +376,10 @@ export default function VokuNav({ ready = false }) {
         hidden={activePanel === "Works." || worksOnScreen}
         firstRevealDelay={SCRIPT_REVEAL_DELAY}
       />
-      <WorksPanel open={activePanel === "Works."} onVisibleChange={setWorksOnScreen} />
+      <WorksPanel
+        open={activePanel === "Works."}
+        onVisibleChange={setWorksOnScreen}
+      />
       <AboutPanel open={activePanel === "About."} />
     </>
   );

@@ -43,7 +43,7 @@ export default function SplitTextReveal({
   onExited,
   className = "",
   style = {},
-  wrapperTag = "div"
+  wrapperTag = "div",
 }) {
   const containerRef = useRef(null);
   const onCompleteRef = useRef(onComplete);
@@ -91,7 +91,7 @@ export default function SplitTextReveal({
         // Fonts can resolve after the element is gone (route change, key swap).
         if (!containerRef.current) return;
 
-        splitRefs.current.forEach(split => split?.revert()); // revert previous SplitText
+        splitRefs.current.forEach((split) => split?.revert()); // revert previous SplitText
         splitRefs.current = [];
         targets.current = [];
 
@@ -99,20 +99,21 @@ export default function SplitTextReveal({
           ? Array.from(containerRef.current.children)
           : [containerRef.current];
 
-        elements.forEach(element => {
+        elements.forEach((element) => {
           try {
-            const splitOptions = type === "chars"
-              ? {
-                  type: "chars",
-                  mask: "chars",
-                  charsClass: "char++",
-                }
-              : {
-                  type: "lines",
-                  mask: "lines",
-                  linesClass: "line++",
-                  lineThreshold: 0.1,
-                };
+            const splitOptions =
+              type === "chars"
+                ? {
+                    type: "chars",
+                    mask: "chars",
+                    charsClass: "char++",
+                  }
+                : {
+                    type: "lines",
+                    mask: "lines",
+                    linesClass: "line++",
+                    lineThreshold: 0.1,
+                  };
 
             const split = SplitText.create(element, splitOptions);
             splitRefs.current.push(split);
@@ -133,7 +134,10 @@ export default function SplitTextReveal({
             const pieces = type === "chars" ? split.chars : split.lines;
             targets.current.push(...pieces);
           } catch (error) {
-            console.warn(`SplitTextReveal: Failed to split element (type=${type})`, error);
+            console.warn(
+              `SplitTextReveal: Failed to split element (type=${type})`,
+              error,
+            );
           }
         });
 
@@ -155,20 +159,21 @@ export default function SplitTextReveal({
       });
 
       return () => {
-        splitRefs.current.forEach(split => split?.revert()); // revert SplitText
+        splitRefs.current.forEach((split) => split?.revert()); // revert SplitText
       };
     },
     {
       scope: containerRef,
       dependencies: [type, delay, duration, effectiveStagger, ease],
-    }
+    },
   );
 
-  if (React.Children.count(children) === 1) { // Single child
+  if (React.Children.count(children) === 1) {
+    // Single child
     return React.cloneElement(children, {
       ref: containerRef,
       className: `${children.props.className || ""} ${className}`.trim(),
-      style: { ...children.props.style, ...style }
+      style: { ...children.props.style, ...style },
     });
   }
 

@@ -61,7 +61,7 @@ export default function AboutPanel({ open = false }) {
         clearProps: "all",
       });
     },
-    { scope: panelRef, dependencies: [open, visible] }
+    { scope: panelRef, dependencies: [open, visible] },
   );
 
   if (!visible) return null;
@@ -69,13 +69,27 @@ export default function AboutPanel({ open = false }) {
   return (
     <aside ref={panelRef} className="about-panel">
       <div className="about-panel__block">
-        <img src="/IMG.webp" className="about-panel__photo" width="460" height="345" decoding="async" alt="" />
+        <img
+          src="/IMG.webp"
+          className="about-panel__photo"
+          width="460"
+          height="345"
+          decoding="async"
+          alt=""
+        />
       </div>
 
       <div className="about-panel__block about-panel__text">{INTRO}</div>
 
       <div className="about-panel__block">
-        <img src="/IMG2.webp" className="about-panel__photo" width="460" height="307" decoding="async" alt="" />
+        <img
+          src="/IMG2.webp"
+          className="about-panel__photo"
+          width="460"
+          height="307"
+          decoding="async"
+          alt=""
+        />
       </div>
 
       <div className="about-panel__block about-panel__text">{TEAM}</div>

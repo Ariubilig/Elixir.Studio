@@ -44,7 +44,7 @@ export default function Preloader({
   const isLast = index === phrases.length - 1;
 
   useEffect(() => {
-    const sessionLoaded = sessionStorage.getItem('sessionLoaded');
+    const sessionLoaded = sessionStorage.getItem("sessionLoaded");
     if (sessionLoaded) {
       setShouldShow(false);
       onFinish();
@@ -63,16 +63,30 @@ export default function Preloader({
     // The opening phrase is the one people actually have to read, so its hold
     // starts only once it has finished rising — the later cuts stay quick.
     if (isFirst && !firstRevealed) return;
-    const timer = setTimeout(() => {
-      if (isLast) {
-        sessionStorage.setItem('sessionLoaded', 'true');
-        onFinish?.();
-      } else {
-        setPhraseExiting(true); // lift this phrase out; the next one follows it
-      }
-    }, isLast ? finalHoldMs : isFirst ? firstHoldMs : holdMs);
+    const timer = setTimeout(
+      () => {
+        if (isLast) {
+          sessionStorage.setItem("sessionLoaded", "true");
+          onFinish?.();
+        } else {
+          setPhraseExiting(true); // lift this phrase out; the next one follows it
+        }
+      },
+      isLast ? finalHoldMs : isFirst ? firstHoldMs : holdMs,
+    );
     return () => clearTimeout(timer);
-  }, [index, isFirst, isLast, firstRevealed, phraseExiting, shouldShow, onFinish, holdMs, firstHoldMs, finalHoldMs]);
+  }, [
+    index,
+    isFirst,
+    isLast,
+    firstRevealed,
+    phraseExiting,
+    shouldShow,
+    onFinish,
+    holdMs,
+    firstHoldMs,
+    finalHoldMs,
+  ]);
 
   // Batched, so the next phrase mounts already unset and rises from the bottom.
   const handlePhraseExited = () => {

@@ -11,7 +11,11 @@ const FADE_IN = { opacity: 1, duration: 0.4, ease: "power3.out" };
 // so it reads as the last thing to settle rather than something already there.
 const FIRST_FADE_DURATION = 0.9;
 
-export default function Script({ ready = false, hidden = false, firstRevealDelay = 0 }) {
+export default function Script({
+  ready = false,
+  hidden = false,
+  firstRevealDelay = 0,
+}) {
   const scriptRef = useRef(null);
   const revealed = useRef(false);
   const isMobile = useIsMobile();
@@ -38,7 +42,7 @@ export default function Script({ ready = false, hidden = false, firstRevealDelay
             onComplete: () => {
               revealed.current = true;
             },
-          }
+          },
     );
 
     return () => tween.kill();

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect } from "react";
 
 // Built once at module scope: constructing an Intl.DateTimeFormat is expensive
 // and the format never varies.
@@ -8,9 +8,9 @@ const formatter = new Intl.DateTimeFormat("en-US", {
   minute: "2-digit",
   second: "2-digit",
   timeZone: "Asia/Ulaanbaatar",
-})
+});
 
-const readClock = () => formatter.format(new Date())
+const readClock = () => formatter.format(new Date());
 
 /**
  * Ulaanbaatar time, ticking once a second.
@@ -20,12 +20,12 @@ const readClock = () => formatter.format(new Date())
  */
 export default function useGMTplus8() {
   // Seeded synchronously, so the first paint already has the real time.
-  const [currentTime, setCurrentTime] = useState(readClock)
+  const [currentTime, setCurrentTime] = useState(readClock);
 
   useEffect(() => {
-    const interval = setInterval(() => setCurrentTime(readClock()), 1000)
-    return () => clearInterval(interval)
-  }, [])
+    const interval = setInterval(() => setCurrentTime(readClock()), 1000);
+    return () => clearInterval(interval);
+  }, []);
 
-  return currentTime
+  return currentTime;
 }
