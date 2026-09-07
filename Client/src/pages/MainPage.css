@@ -58,6 +58,7 @@
 }
 
 .voku-nav-wrapper {
+  position: relative; /* anchor for the mobile contact row */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -72,20 +73,24 @@
   display: none;
 }
 
+/* Mobile only — on desktop these items splice into the nav line itself.
+ * Taken out of flow so the row hangs off the nav instead of growing the
+ * wrapper: the design keeps the nav pinned to the exact centre whether or not
+ * contact is open, and an in-flow row would push it half a row-height up.
+ */
 .voku-nav__contact-row {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
-  justify-content: center;
   align-items: baseline;
   gap: 4px;
   margin-top: 4px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 400;
   letter-spacing: -0.03em;
-}
-
-.voku-nav__contact-row .contact-item {
-  font-size: 12px;
-  letter-spacing: -0.03em;
+  white-space: nowrap;
 }
 
 @media (max-width: 480px) {
@@ -95,6 +100,11 @@
     letter-spacing: -0.03em;
   }
 
+  /* The route sits tighter on mobile than the 6px desktop rhythm. */
+  .voku-nav__item + .voku-nav__item {
+    margin-left: 4px;
+  }
+
   .voku-nav-wrapper--mobile {
     position: fixed;
     top: 50%;
@@ -102,10 +112,18 @@
     transform: translate(-50%, -50%);
     z-index: 60;
     width: max-content;
-    transition: background 0.3s ease;
   }
 
-  .voku-nav-wrapper--mobile.voku-nav-wrapper--about-open {
-    background: #eeeeee;
+  /* Softens whatever runs behind the nav — the script on the landing and
+     contact screens, the about column once that is open. */
+  .voku-nav-wrapper--mobile .voku-nav {
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+  }
+
+  /* Over the about column the nav gets the design's 4px of breathing room, so
+     the blurred strip clears the type instead of stopping at its edges. */
+  .voku-nav-wrapper--mobile.voku-nav-wrapper--about-open .voku-nav {
+    padding: 4px;
   }
 }

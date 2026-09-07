@@ -44,6 +44,13 @@
     right: 0;
     width: 100%;
     height: 100vh;
-    padding: 20px;
+    /* dvh so the last block clears a collapsing mobile URL bar. */
+    height: 100dvh;
+    padding: 0 0 20px;
+  }
+
+  /* Photos run edge to edge on mobile; only the copy keeps its gutter. */
+  .about-panel__text {
+    padding: 0 10px;
   }
 }

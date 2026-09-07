@@ -8,3 +8,13 @@
   pointer-events: none;
   user-select: none;
 }
+
+/* Mobile tucks the script further into the corner, and the export it uses
+   carries its own blur bleed — so 20px here lands the glyphs on the design's
+   20px inset. */
+@media (max-width: 480px) {
+  .script {
+    top: 20px;
+    left: 20px;
+  }
+}

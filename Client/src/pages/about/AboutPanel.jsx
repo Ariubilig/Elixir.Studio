@@ -73,7 +73,7 @@ export default function AboutPanel({ open = false }) {
           src="/IMG.webp"
           className="about-panel__photo"
           width="460"
-          height="345"
+          height="307"
           decoding="async"
           alt=""
         />
@@ -86,7 +86,7 @@ export default function AboutPanel({ open = false }) {
           src="/IMG2.webp"
           className="about-panel__photo"
           width="460"
-          height="307"
+          height="345"
           decoding="async"
           alt=""
         />
