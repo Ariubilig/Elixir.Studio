@@ -3,9 +3,9 @@ import SplitTextReveal from "../splittext/SplitTextReveal";
 
 const DEFAULT_PHRASES = [
   "Not Real, Yet.",
-  "Creative",
-  "Meaningful ",
-  "From the bottom",
+  "Creative.",
+  "Prideful.",
+  "Meaningful.",
   "Elixir.Studio™",
 ];
 
